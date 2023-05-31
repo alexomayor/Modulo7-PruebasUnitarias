@@ -4,12 +4,35 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Modulo 5: Las 7 y media</title>
+    <script type="module" src="/src/main.ts"></script>
   </head>
   <body>
-    <div id="app">
-      <h1>TypeScript Sandbox</h1>
+    <div class="h1Container">
+      <h1>7 y media</h1>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    <div class="buttons1">
+      <button id="forfeitButton" title="abandonButton" disabled>
+        ⛒ Plantarse
+      </button>
+      <button id="resetButton" title="resetButton" disabled>♻ Reiniciar</button>
+    </div>
+    <div class="cards1">
+      <div class="marcadorMensaje">
+        <span id="marcador">0</span>
+        <span id="mensaje"></span>
+      </div>
+      <div class="deck">
+        <button id="dealCardButton" title="dealCardButton">Pide carta</button>
+        <button id="whatIfButton" title="whatIfButton" disabled>
+          Hice Bien?
+        </button>
+        <img
+          src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
+          id="cartaActual"
+          alt=""
+        />
+      </div>
+    </div>
   </body>
 </html>
