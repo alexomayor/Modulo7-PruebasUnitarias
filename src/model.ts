@@ -6,9 +6,6 @@ interface GlobalVariable {
 export let globalVariable: GlobalVariable = {
   currentPoints: 0,
   targetPoints: 7.5,
-  // const UNDER_SCORE = 0;
-  // const PERFECT_SCORE = 1;
-  // const OVER_SCORE = 2;
 };
 
 //////////////////////BUTTONS//////////////////////

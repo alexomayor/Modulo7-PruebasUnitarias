@@ -27,6 +27,7 @@ function whatIf() {
   let CardToBeDisplayed: string = fetchCardURL(newCardNumber.toString()); // fetches new card image URL
   let newCardPoints = newCardPointsToSUM(newCardNumber); // calculates new card points (0.5 or 1-7)
   updateCurrentImage(CardToBeDisplayed); // updates image displayed
+
   let messageToShow: string = whatIfMessage(
     globalVariable.currentPoints,
     newCardPoints
