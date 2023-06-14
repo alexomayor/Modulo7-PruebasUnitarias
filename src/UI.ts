@@ -5,17 +5,76 @@ import {
   whatIfButton,
   resetButton,
   gameMessages,
+  gameStatus,
 } from "./model";
 
+import {
+  newCardPointsToSUM,
+  newCardNumberCalc,
+  newCardValueCalc,
+  gameStatusCheck,
+} from "./motor";
+
+/////////////////////////////////////////////////BUTTONS: FUNCTIONS/////////////////////////////////////////////////
+
+export function whatIfClick() {
+  disableButtonWhatIf(true);
+  whatIf();
+}
+
+function whatIf() {
+  let newCardValue: number = newCardValueCalc(); // generates random value (1-10)
+  let newCardNumber = newCardNumberCalc(newCardValue); // assigns card number from previous random value (1-7 / 10-12)
+  let CardToBeDisplayed: string = fetchCardURL(newCardNumber.toString()); // fetches new card image URL
+  let newCardPoints = newCardPointsToSUM(newCardNumber); // calculates new card points (0.5 or 1-7)
+  updateCurrentImage(CardToBeDisplayed); // updates image displayed
+
+  let messageToShow: string = whatIfMessage(
+    globalVariable.currentPoints,
+    newCardPoints
+  );
+  updateMessage(messageToShow);
+  globalVariable.currentPoints += newCardPoints; // sums newCardPoints to currentPoints, which holds current game score
+  displayPoints(globalVariable.currentPoints.toString()); // displays current game score in the scoreboard span
+}
+
+export function resetGame() {
+  globalVariable.currentPoints = 0;
+  allButtonsDisabledExceptDealCard();
+  updateMessage(gameMessages.messageStartGame);
+  displayPoints(globalVariable.currentPoints.toString());
+  let CardToBeDisplayed: string = fetchCardURL("Card Reverse");
+  updateCurrentImage(CardToBeDisplayed);
+}
+
+export function abandon() {
+  allButtonsDisabledExceptResetGameWhatIf();
+  let messageToShow: string = abandonMessage(globalVariable.currentPoints);
+  updateMessage(messageToShow);
+}
+
+export function dealCard() {
+  let newCardValue: number = newCardValueCalc(); // generates random value (1-10)
+  let newCardNumber = newCardNumberCalc(newCardValue); // assigns card number from previous random value (1-7 / 10-12)
+  let CardToBeDisplayed: string = fetchCardURL(newCardNumber.toString()); // fetches new card image URL
+  let newCardPoints = newCardPointsToSUM(newCardNumber); // calculates new card points (0.5 or 1-7)
+  updateCurrentImage(CardToBeDisplayed); // updates image displayed
+  globalVariable.currentPoints += newCardPoints; // sums newCardPoints to currentPoints, which holds current game score
+  gameStart();
+  displayPoints(globalVariable.currentPoints.toString()); // displays current game score in the scoreboard span
+  gameCheck(globalVariable.currentPoints); // checks wether the current game is won or lost
+}
+
 /////////////////////////////////////////////////UPDATE IMAGE/////////////////////////////////////////////////
-export function updateCurrentImage(value: string): void {
+
+function updateCurrentImage(value: string): void {
   const currentImage = document.getElementById("cartaActual");
   if (currentImage && currentImage instanceof HTMLImageElement) {
     currentImage.src = value;
   }
 }
 
-export function fetchCardURL(value: string) {
+function fetchCardURL(value: string) {
   switch (value) {
     case "1":
       value =
@@ -65,6 +124,7 @@ export function fetchCardURL(value: string) {
 }
 
 /////////////////////////////////////////////////MESSAGES & SCOREBOARD UPDATES/////////////////////////////////////////////////
+
 export function whatIfMessage(pointsNow: number, newPoints: number) {
   return pointsNow + newPoints > globalVariable.targetPoints
     ? gameMessages.messageWhatIfGoodDecision
@@ -84,12 +144,13 @@ export function abandonMessage(value: number) {
   return "";
 }
 
-export function updateMessage(messageToShow: string) {
+function updateMessage(messageToShow: string) {
   const messageSpan = document.getElementById("message");
   if (messageSpan && messageSpan instanceof HTMLSpanElement) {
     messageSpan.textContent = messageToShow;
   }
 }
+
 export const displayPoints = (points: string) => {
   let scoreboardText = `Puntos: ` + points;
   let scoreboardSpan = document.getElementById("scoreboard");
@@ -99,44 +160,75 @@ export const displayPoints = (points: string) => {
 };
 
 /////////////////////////////////////////////////DISABLING BUTTONS/////////////////////////////////////////////////
+
 function disableButtonDealCard(value: boolean) {
   if (dealCardButton && dealCardButton instanceof HTMLButtonElement) {
     dealCardButton.disabled = value;
   }
 }
-export function disableButtonAbandonCard(value: boolean) {
+
+function disableButtonAbandonCard(value: boolean) {
   if (abandonButton && abandonButton instanceof HTMLButtonElement) {
     abandonButton.disabled = value;
   }
 }
-export function disableButtonWhatIf(value: boolean) {
+
+function disableButtonWhatIf(value: boolean) {
   if (whatIfButton && whatIfButton instanceof HTMLButtonElement) {
     whatIfButton.disabled = value;
   }
 }
-export function disableButtonReset(value: boolean) {
+
+function disableButtonReset(value: boolean) {
   if (resetButton && resetButton instanceof HTMLButtonElement) {
     resetButton.disabled = value;
   }
 }
 
-export function allButtonsDisabledExceptDealCard() {
+function allButtonsDisabledExceptDealCard() {
   disableButtonDealCard(false);
   disableButtonAbandonCard(true);
   disableButtonWhatIf(true);
   disableButtonReset(true);
 }
 
-export function allButtonsDisabledExceptResetGame() {
+function allButtonsDisabledExceptResetGame() {
   disableButtonDealCard(true);
   disableButtonAbandonCard(true);
   disableButtonWhatIf(true);
   disableButtonReset(false);
 }
 
-export function allButtonsDisabledExceptResetGameWhatIf() {
+function allButtonsDisabledExceptResetGameWhatIf() {
   disableButtonDealCard(true);
   disableButtonAbandonCard(true);
   disableButtonWhatIf(false);
   disableButtonReset(false);
+}
+
+/////////////////////////////////////////////////GAME START & GAME OVER/////////////////////////////////////////////////
+
+function gameStart() {
+  disableButtonAbandonCard(false);
+  disableButtonReset(false);
+  updateMessage("");
+}
+
+function gameCheck(value: number) {
+  if (gameStatusCheck(value) === gameStatus.lost) {
+    gameLost();
+  }
+  if (gameStatusCheck(value) === gameStatus.won) {
+    gameWon();
+  }
+}
+
+function gameWon() {
+  allButtonsDisabledExceptResetGame();
+  updateMessage(gameMessages.messageGameWon);
+}
+
+function gameLost() {
+  allButtonsDisabledExceptResetGame();
+  updateMessage(gameMessages.messageGameLost);
 }

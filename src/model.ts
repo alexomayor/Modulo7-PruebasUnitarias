@@ -1,14 +1,31 @@
+//////////////////////GLOBAL VARIABLES//////////////////////
+
 interface GlobalVariable {
   currentPoints: number;
   targetPoints: number;
 }
 
-export let globalVariable: GlobalVariable = {
+export const globalVariable: GlobalVariable = {
   currentPoints: 0,
   targetPoints: 7.5,
 };
 
+//////////////////////STATUS//////////////////////
+
+interface GameStatus {
+  lost: string;
+  won: string;
+  ongoing: string;
+}
+
+export const gameStatus: GameStatus = {
+  lost: "GAME_LOST",
+  won: "GAME_WON",
+  ongoing: "GAME_ONGOING",
+};
+
 //////////////////////BUTTONS//////////////////////
+
 export const dealCardButton = document.getElementById("dealCardButton");
 export const abandonButton = document.getElementById("forfeitButton");
 export const whatIfButton = document.getElementById("whatIfButton");
