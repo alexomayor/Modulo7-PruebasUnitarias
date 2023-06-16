@@ -1,12 +1,10 @@
+import { globalVariable, gameMessages, gameStatus } from "./model";
 import {
-  globalVariable,
   dealCardButton,
   abandonButton,
   whatIfButton,
   resetButton,
-  gameMessages,
-  gameStatus,
-} from "./model";
+} from "./shell";
 
 import {
   newCardPointsToSUM,

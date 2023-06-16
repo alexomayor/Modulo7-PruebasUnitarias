@@ -24,13 +24,6 @@ export const gameStatus: GameStatus = {
   ongoing: "GAME_ONGOING",
 };
 
-//////////////////////BUTTONS//////////////////////
-
-export const dealCardButton = document.getElementById("dealCardButton");
-export const abandonButton = document.getElementById("forfeitButton");
-export const whatIfButton = document.getElementById("whatIfButton");
-export const resetButton = document.getElementById("resetButton");
-
 //////////////////////MESSAGES//////////////////////
 interface GameMessages {
   messageStartGame: string;
