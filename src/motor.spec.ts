@@ -4,7 +4,7 @@ import * as model from "./model";
 describe("gameStatusCheck", () => {
   it("should return gameStatus.won if points are equal to target", () => {
     //Arrange
-    const points: number = model.globalVariable.targetPoints;
+    const points: number = 7.5;
     const expectedResult: string = model.gameStatus.won;
 
     //Act
@@ -16,7 +16,7 @@ describe("gameStatusCheck", () => {
 
   it("should return gameStatus.lost if points are above target", () => {
     //Arrange
-    const points: number = model.globalVariable.targetPoints + 0.1; // added a decimal point to target points
+    const points: number = 7.5 + 0.1; // added a decimal point to target points
     const expectedResult: string = model.gameStatus.lost;
 
     //Act
@@ -28,7 +28,7 @@ describe("gameStatusCheck", () => {
 
   it("should return gameStatus.ongoing if points are below target", () => {
     // Arrange
-    const points: number = model.globalVariable.targetPoints - 0.1; // substracted a decimal point to target points
+    const points: number = 7.5 - 0.1; // substracted a decimal point to target points
     const expectedResult: string = model.gameStatus.ongoing;
 
     // Act
@@ -184,5 +184,30 @@ describe("newCardPointsToSUM", () => {
 
     // Assert
     expect(output).toBe(expectedResult);
+  });
+});
+
+describe("newCardValueCalcCheck", () => {
+  it("should return the lowest possible number, 1", () => {
+    //Arrange
+    const expectedPoints: number = 1;
+    vi.spyOn(global.Math, "random").mockReturnValue(0);
+
+    //Act
+    const output: string = motor.newCardValueCalc();
+
+    //Assert
+    expect(output).toBe(expectedPoints);
+  });
+  it("should return the highest possible number, 10", () => {
+    //Arrange
+    const expectedPoints: number = 10;
+    vi.spyOn(global.Math, "random").mockReturnValue(1);
+
+    //Act
+    const output: string = motor.newCardValueCalc();
+
+    //Assert
+    expect(output).toBe(expectedPoints);
   });
 });
